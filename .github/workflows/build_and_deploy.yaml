@@ -29,4 +29,4 @@ jobs:
           push: true
           context: .
           tags: ${{ secrets.AZURE_URL }}/adsee/javafoil:${{ github.sha }}, ${{ secrets.AZURE_URL }}/adsee/javafoil:latest
-          file: docker/DockerFile
+          file: docker/Dockerfile
