@@ -1,7 +1,7 @@
 {
 	"name": "Java Development",
-	"dockerComposeFile": ["docker-compose.yaml"],
-    "service": "devcontainer",
+	"dockerComposeFile": ["../docker-compose.yaml"],
+    "service": "javafoil",
     "workspaceFolder": "/workspace",
     "shutdownAction": "stopCompose",
     "overrideCommand": true,
@@ -15,17 +15,11 @@
                 },
                 "terminal.integrated.defaultProfile.linux": "bash",
                 "python.linting.enabled": true,
-                "python.linting.pylintEnabled": true,
-                "plantuml.exportFormat": "png",
-                "plantuml.render": "PlantUMLServer",
-                "plantuml.server": "http://plantuml:8080",
-                "plantuml.diagramsRoot": "diagrams",
-                "plantuml.exportOutDir": "diagrams/out"
+                "python.linting.pylintEnabled": true
             },
             "extensions": [
 				"ms-python.python",
 				"ms-azuretools.vscode-docker",
-				"jebbs.plantuml",
 				"vscjava.vscode-java-pack",
 				"dgileadi.java-decompiler"
 			]

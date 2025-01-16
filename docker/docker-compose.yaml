@@ -1,17 +1,9 @@
 services:
-  # Local MSSQL database service
-  database:
-    image: mariadb:latest
-    volumes:
-      - ../bin/database:/var/lib/mysql
-      # Copying the local ssh files. This should allow for easier ssh access.
-      - ~/.ssh:/root/.ssh
-
-  devcontainer:
+  javafoil:
     build: 
       # Bringing the context to root
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: docker/Dockerfile
     volumes:
       - ../:/workspace
       # Docker socket to access Docker server
@@ -26,9 +18,10 @@ services:
       # Git config
       - ~/.gitconfig:/root/.gitconfig
     #restart: unless-stopped
-    depends_on:
-      - database
-      - plantuml
-
-  plantuml:
-    image: plantuml/plantuml-server:jetty
+    ports:
+      - 14500:14500
+    command: 
+      - "start"
+      - "--daemon=no"
+      - "--start-child='/home/javafoil/MH-AeroTools/JavaFoil/JavaFoil.sh'"
+      - "--exit-with-children"
