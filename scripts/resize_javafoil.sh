@@ -1,5 +1,5 @@
 #!/bin/bash
-sleep 1
+sleep 3
 
 # Shutting down warning window.
 wmctrl -F -c "JavaFoil - Warning"
