@@ -6,6 +6,8 @@ services:
       dockerfile: docker/Dockerfile
     volumes:
       - ../:/workspace
+      - ../persistent:/home/javafoil/persistent
+      - ../secrets:/home/javafoil/.secrets
       # Docker socket to access Docker server
       - /var/run/docker.sock:/var/run/docker.sock
       # SSH directory
@@ -20,8 +22,3 @@ services:
     #restart: unless-stopped
     ports:
       - 14500:14500
-    command: 
-      - "start"
-      - "--daemon=no"
-      - "--start-child='/home/javafoil/MH-AeroTools/JavaFoil/JavaFoil.sh'"
-      - "--exit-with-children"

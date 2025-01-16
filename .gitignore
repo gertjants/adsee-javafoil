@@ -2,3 +2,5 @@
 javafoil/
 bin/
 mhclasses/
+.env
+secrets/*.txt

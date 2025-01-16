@@ -1,6 +1,6 @@
 {
 	"name": "Java Development",
-	"dockerComposeFile": ["../docker-compose.yaml"],
+	"dockerComposeFile": ["../docker/docker-compose.yaml"],
     "service": "javafoil",
     "workspaceFolder": "/workspace",
     "shutdownAction": "stopCompose",
