@@ -1,0 +1,36 @@
+{
+	"name": "Java Development",
+	"dockerComposeFile": ["docker-compose.yaml"],
+    "service": "devcontainer",
+    "workspaceFolder": "/workspace",
+    "shutdownAction": "stopCompose",
+    "overrideCommand": true,
+    "customizations": {
+        "vscode" : {
+            "settings": {
+                "terminal.integrated.profiles.linux": {
+                    "bash": {
+                        "path": "/bin/bash"
+                    }
+                },
+                "terminal.integrated.defaultProfile.linux": "bash",
+                "python.linting.enabled": true,
+                "python.linting.pylintEnabled": true,
+                "plantuml.exportFormat": "png",
+                "plantuml.render": "PlantUMLServer",
+                "plantuml.server": "http://plantuml:8080",
+                "plantuml.diagramsRoot": "diagrams",
+                "plantuml.exportOutDir": "diagrams/out"
+            },
+            "extensions": [
+				"ms-python.python",
+				"ms-azuretools.vscode-docker",
+				"jebbs.plantuml",
+				"vscjava.vscode-java-pack",
+				"dgileadi.java-decompiler"
+			]
+        }
+    },
+    //"postCreateCommand": "/var/opt/scripts/install_samples.sh",
+    "postStartCommand": "git config --global --add safe.directory ${containerWorkspaceFolder}"
+}

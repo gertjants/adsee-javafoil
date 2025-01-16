@@ -1,0 +1,34 @@
+services:
+  # Local MSSQL database service
+  database:
+    image: mariadb:latest
+    volumes:
+      - ../bin/database:/var/lib/mysql
+      # Copying the local ssh files. This should allow for easier ssh access.
+      - ~/.ssh:/root/.ssh
+
+  devcontainer:
+    build: 
+      # Bringing the context to root
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ../:/workspace
+      # Docker socket to access Docker server
+      - /var/run/docker.sock:/var/run/docker.sock
+      # SSH directory
+      - ~/.ssh:/root/.ssh
+      # For Windows without WSL, a copy will be made
+      # from /tmp/.ssh to ~/.ssh to fix permissions
+      # - ~/.ssh:/tmp/.ssh:ro
+      # Shell history persistence
+      - ~/.zsh_history:/root/.zsh_history:z
+      # Git config
+      - ~/.gitconfig:/root/.gitconfig
+    #restart: unless-stopped
+    depends_on:
+      - database
+      - plantuml
+
+  plantuml:
+    image: plantuml/plantuml-server:jetty
