@@ -48,7 +48,7 @@ USER 1001
 RUN wget -O "/tmp/javafoilinstaller.sh" https://www.mh-aerotools.de/airfoils/java/javafoilinstaller.sh
 RUN chmod +x /tmp/javafoilinstaller.sh 
 RUN echo y | /tmp/javafoilinstaller.sh
-COPY --chown=javafoil ./scripts/resize_javafoil.sh /home/javafoil/
-RUN chmod +x /home/javafoil/MH-AeroTools/JavaFoil/JavaFoil.sh /home/javafoil/resize_javafoil.sh
+COPY --chown=javafoil ./scripts/*.sh /home/javafoil/
+RUN chmod +x /home/javafoil/MH-AeroTools/JavaFoil/JavaFoil.sh /home/javafoil/*.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
