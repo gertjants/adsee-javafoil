@@ -6,6 +6,9 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  DOCKER_REPO: ${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}
+  GITHUB_REPO: ghcr.io/${{ github.repository }}
+  AZURE_REPO: ${{ secrets.AZURE_URL }}/engineering/airfoil-tools
 
 jobs:
   build:
@@ -65,12 +68,12 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}
-            ghcr.io/${{ github.repository }}
-            ${{ secrets.AZURE_URL }}/engineering/airfoil-tools
+            ${{ env.DOCKER_REPO }}
+            ${{ env.GITHUB_REPO }}
+            ${{ env.AZURE_REPO }}
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+      # - name: Set up QEMU
+      #   uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -84,7 +87,7 @@ jobs:
           file: docker/Dockerfile
           #tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          outputs: type=image,"name=${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }},ghcr.io/${{ github.repository }},${{ secrets.AZURE_URL }}/engineering/airfoil-tools",push-by-digest=true,name-canonical=true,push=true
+          outputs: type=image,"name=${{ env.DOCKER_REPO }},${{ env.GITHUB_REPO }},${{ env.AZURE_REPO }}",push-by-digest=true,name-canonical=true,push=true
 
       - name: Export digest
         run: |
@@ -140,9 +143,9 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}
-            ghcr.io/${{ github.repository }}
-            ${{ secrets.AZURE_URL }}/engineering/airfoil-tools
+            ${{ env.DOCKER_REPO }}
+            ${{ env.GITHUB_REPO }}
+            ${{ env.AZURE_REPO }}
           tags: |
             type=ref,event=branch
             type=sha
@@ -153,17 +156,17 @@ jobs:
         working-directory: ${{ runner.temp }}/digests
         run: |
           docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
-            $(printf '${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}@sha256:%s ' *)
+            $(printf '${{ env.DOCKER_REPO }}@sha256:%s ' *)
           docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
-            $(printf 'ghcr.io/${{ github.repository }}@sha256:%s ' *)       
+            $(printf '${{ env.GITHUB_REPO }}@sha256:%s ' *)       
           docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
-            $(printf '${{ secrets.AZURE_URL }}/engineering/airfoil-tools@sha256:%s ' *)      
+            $(printf '${{ env.AZURE_REPO }}@sha256:%s ' *)      
 
       - name: Inspect image
         run: |
-          docker buildx imagetools inspect ${{ secrets.DOCKER_NAMESPACE }}/${{ secrets.DOCKER_REPOSITORY }}:${{ steps.meta.outputs.version }}
-          docker buildx imagetools inspect ghcr.io/${{ github.repository }}:${{ steps.meta.outputs.version }} 
-          docker buildx imagetools inspect ${{ secrets.AZURE_URL }}/engineering/airfoil-tools:${{ steps.meta.outputs.version }} 
+          docker buildx imagetools inspect ${{ env.DOCKER_REPO }}:${{ steps.meta.outputs.version }}
+          docker buildx imagetools inspect ${{ env.GITHUB_REPO }}:${{ steps.meta.outputs.version }} 
+          docker buildx imagetools inspect ${{ env.AZURE_REPO }}:${{ steps.meta.outputs.version }} 
 
 
 
